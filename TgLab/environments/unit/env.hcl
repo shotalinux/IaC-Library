@@ -1,9 +1,9 @@
 locals {
-  env_name = "unit"
+  env_name = "UnitTest"
   
   tags = {
     "Environment" = local.env_name
-    "Owner"       = "DevOps Team"
+    "Owner"       = "Shota"
     "Project"     = "IaC-Library"
   }
 }

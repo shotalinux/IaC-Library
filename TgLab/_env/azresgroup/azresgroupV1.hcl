@@ -10,6 +10,6 @@ locals {
 
 inputs = {
   name     = "resource-group-${local.env_name}"
-  location = "eu-central-1"
+  location = "westeurope"
   tags     = local.env_vars.locals.tags
 }
