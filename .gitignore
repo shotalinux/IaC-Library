@@ -38,3 +38,4 @@ terraform.rc
 
 # Terragrunt cache
 .terragrunt-cache
+.terraform.lock.hcl

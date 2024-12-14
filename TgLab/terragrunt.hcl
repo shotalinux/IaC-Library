@@ -5,7 +5,7 @@ generate "backend" {
 terraform {
   backend "s3" {
     bucket         = "shotas3"
-    key            = ${path_relative_to_include()}/terraform.tfstate"
+    key            = "${path_relative_to_include()}/terraform.tfstate"
     region         = "eu-central-1"
     dynamodb_table = "terraform-state-lock"
     encrypt        = true
@@ -32,11 +32,6 @@ terraform {
 
 provider "azurerm" {
   features {}
-
-  subscription_id = var.azure_subscription_id
-  client_id       = var.azure_client_id
-  client_secret   = var.azure_client_secret
-  tenant_id       = var.azure_tenant_id
 }
 EOF
 }
