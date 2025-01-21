@@ -3,9 +3,6 @@ name: Terragrunt Unit Tests
 on:
   workflow_dispatch:
 
-permissions:
-  id-token: write  # Add this to allow write access to the ID token
-
 env:
   tf_version: 'latest'          # Terraform version
   tg_version: '0.68.5'         # Terragrunt version
@@ -14,21 +11,6 @@ env:
 jobs:
   terragrunt-tests:
     runs-on: ubuntu-latest
-    env:
-      # Azure credentials for the backend and operations
-      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-
-      # AWS credentials for any AWS resource handling
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-      
-      # GitHub token for actions that may need to interact with PRs or issues
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     steps:
       # Checkout the repository
       - name: Checkout repository
@@ -47,15 +29,11 @@ jobs:
           chmod +x terragrunt
           sudo mv terragrunt /usr/local/bin/
 
-      # Azure login using the Service Principal
-      - name: Azure Login
-        uses: azure/login@v1
+      # Azure login using Service Principal Secret
+      - name: Azure Login with Service Principal
+        uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          auth-type: 'oidc'
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # Run Terragrunt formatting check
       - name: Check Terragrunt HCL formatting
