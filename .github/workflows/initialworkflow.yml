@@ -4,24 +4,45 @@ on:
   workflow_dispatch:
 
 env:
-  tf_version: 'latest'          # Replace with the desired Terraform version
-  tg_version: '0.68.5'         # Replace with the desired Terragrunt version
-  tg_dir: 'TgLab/environments/unit/azresgroup' # Adjust as per your Terragrunt directory
+  tf_version: 'latest'          # Terraform version
+  tg_version: '0.68.5'         # Terragrunt version
+  tg_dir: 'TgLab/environments/unit/azresgroup' # Path to your Terragrunt directory
 
 jobs:
   terragrunt-tests:
     runs-on: ubuntu-latest
     env:
+      # Azure credentials for the backend and operations
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+
+      # AWS credentials for any AWS resource handling
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      
+      # GitHub token for actions that may need to interact with PRs or issues
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       # Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      # Install Terraform
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.tf_version }}
+
+      # Install Terragrunt
+      - name: Install Terragrunt
+        run: |
+          curl -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v${{ env.tg_version }}/terragrunt_linux_amd64
+          chmod +x terragrunt
+          sudo mv terragrunt /usr/local/bin/
 
       # Run Terragrunt formatting check
       - name: Check Terragrunt HCL formatting
