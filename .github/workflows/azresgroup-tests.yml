@@ -1,0 +1,12 @@
+name: AZ Resource Group Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-module:
+    uses: ./.github/workflows/common-terragrunt-tests.yml
+    with:
+      tf_version: 'latest'
+      tg_version: '0.68.5'
+      tg_dir: 'TgLab/environments/unit/azresgroup'
