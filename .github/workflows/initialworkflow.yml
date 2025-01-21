@@ -3,6 +3,9 @@ name: Terragrunt Unit Tests
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write  # Add this to allow write access to the ID token
+
 env:
   tf_version: 'latest'          # Terraform version
   tg_version: '0.68.5'         # Terragrunt version
