@@ -52,6 +52,7 @@ jobs:
           client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          auth-type: 'service-principal'
 
       # Run Terragrunt formatting check
       - name: Check Terragrunt HCL formatting
