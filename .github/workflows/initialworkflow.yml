@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 env:
-  tf_version: '1.4.6'          # Replace with the desired Terraform version
-  tg_version: '0.50.8'         # Replace with the desired Terragrunt version
+  tf_version: 'latest'          # Replace with the desired Terraform version
+  tg_version: '0.68.5'         # Replace with the desired Terragrunt version
   tg_dir: 'TgLab/environments/unit/azresgroup' # Adjust as per your Terragrunt directory
 
 jobs:
