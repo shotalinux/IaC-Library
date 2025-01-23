@@ -17,6 +17,10 @@ jobs:
         with:
           fetch-depth: 0  # Required for SonarCloud to analyze the full history
 
+      - name: Debug Secrets
+        run: |
+          echo "SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}"
+
       - name: Run SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
