@@ -1,0 +1,29 @@
+name: SonarCloud Scan
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main  # Trigger on pushes to the main branch
+  # pull_request:
+  #   types: [opened, synchronize]  # Trigger on PRs
+
+jobs:
+  sonarcloud-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Required for SonarCloud to analyze the full history
+
+      - name: Set up JDK (if your project is Java-based)
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'  # Adjust to your project's JDK version
+          distribution: 'temurin'
+
+      - name: Run SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for PR decoration
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # SonarCloud token
