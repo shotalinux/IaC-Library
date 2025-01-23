@@ -9,5 +9,5 @@ jobs:
     with:
       tf_version: 'latest'
       tg_version: '0.68.5'
-      tg_dir: 'TgLab/environments/unit/azresgroup'
+      tg_dir: 'TgLab/environments/azure/resgroup'
     secrets: inherit # Pass all secrets from the parent workflow
