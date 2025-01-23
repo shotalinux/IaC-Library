@@ -5,7 +5,7 @@ on:
 
 jobs:
   test-module:
-    uses: ./.github/workflows/common-terragrunt-azure.yml
+    uses: ./.github/workflows/common-terragrunt.yml
     with:
       tf_version: 'latest'
       tg_version: '0.68.5'
