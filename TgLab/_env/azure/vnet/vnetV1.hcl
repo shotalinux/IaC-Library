@@ -9,7 +9,7 @@ locals {
 }
 
 inputs = {
-  name          = "vnet-${local.env_name}"
+  vnet_name          = "vnet-${local.env_name}"
   location      = "westeurope"
   tags          = local.env_vars.locals.tags
   address_space = ["10.0.0.0/16"]
