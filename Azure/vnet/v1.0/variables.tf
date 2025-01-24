@@ -18,16 +18,6 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "subnet_name" {
-  description = "The name of the subnet within the virtual network."
-  type        = string
-}
-
-variable "subnet_address_prefix" {
-  description = "The address prefix for the subnet."
-  type        = string
-}
-
 variable "tags" {
   description = "A mapping of tags to assign to the resource."
   type        = map(string)

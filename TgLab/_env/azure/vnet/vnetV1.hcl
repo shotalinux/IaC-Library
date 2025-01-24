@@ -13,6 +13,4 @@ inputs = {
   location      = "westeurope"
   tags          = local.env_vars.locals.tags
   address_space = ["10.0.0.0/16"]
-  subnet_name   = "subnet-${local.env_name}"
-  subnet_address_prefix = "10.0.0.0/24"
 }
