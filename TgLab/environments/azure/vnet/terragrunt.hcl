@@ -22,5 +22,5 @@ dependency "resgroup" {
 }
 
 inputs = {
-  resource_group_name        = dependency.resgroup.outputs.resource_group_name
+  rg_name        = dependency.resgroup.outputs.resource_group_name
 }

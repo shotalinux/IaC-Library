@@ -8,6 +8,6 @@ jobs:
     uses: ./.github/workflows/common-terragrunt.yml
     with:
       tf_version: 'latest'
-      tg_version: '0.68.5'
+      tg_version: '0.72.4'
       tg_dir: 'TgLab/environments/azure/resgroup'
     secrets: inherit # Pass all secrets from the parent workflow

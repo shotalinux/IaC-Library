@@ -13,7 +13,7 @@ variable "location" {
   type        = string
 }
 
-variable "resource_group_name" {
+variable "rg_name" {
   description = "The name of the resource group where the virtual network will be created."
   type        = string
 }
