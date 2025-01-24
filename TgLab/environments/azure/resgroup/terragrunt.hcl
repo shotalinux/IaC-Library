@@ -3,7 +3,7 @@ include "root" {
 }
 
 include "env" {
-  path   = "${get_terragrunt_dir()}/../../../_env/azresgroup/azresgroupV1.hcl"
+  path   = "${get_terragrunt_dir()}/../../../_env/azure/azresgroup/azresgroupV1.hcl"
   expose = true
 }
 
