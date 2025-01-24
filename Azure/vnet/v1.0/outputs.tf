@@ -3,5 +3,5 @@ output "vnet_id" {
 }
 
 output "subnet_address_prefix" {
-  value = azurerm_virtual_network.this.subnet[0].address_prefix
+  value = tolist(azurerm_virtual_network.this.subnet)[0].address_prefix
 }
