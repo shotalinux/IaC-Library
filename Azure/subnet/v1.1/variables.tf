@@ -1,6 +1,6 @@
 variable "subnet_name" {
-  description = "The name of the subnet"
-  type        = string
+  description = "The names of the subnet"
+  type        = list(string)
 }
 
 variable "rg_name" {
