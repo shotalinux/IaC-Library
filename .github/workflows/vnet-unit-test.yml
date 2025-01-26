@@ -1,0 +1,13 @@
+name: AZ Resource Group Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-module:
+    uses: ./.github/workflows/common-terragrunt-unit.yml
+    with:
+      tf_version: 'latest'
+      tg_version: '0.72.4'
+      tg_dir: 'TgLab/environments/azure/vnet-unit'
+    secrets: inherit # Pass all secrets from the parent workflow

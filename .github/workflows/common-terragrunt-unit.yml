@@ -1,4 +1,4 @@
-name: Common Terragrunt Tests
+name: Common Terragrunt Unit Tests
 
 on:
   workflow_call:
@@ -56,31 +56,31 @@ jobs:
           tg_dir: ${{ inputs.tg_dir }}
           tg_command: 'hclfmt --terragrunt-check --terragrunt-diff'
 
-      # Plan execution
-      - name: Terragrunt Plan
+      # Run-all Plan execution
+      - name: Terragrunt Run-All Plan
         uses: gruntwork-io/terragrunt-action@v2
         with:
           tf_version: ${{ inputs.tf_version }}
           tg_version: ${{ inputs.tg_version }}
           tg_dir: ${{ inputs.tg_dir }}
-          tg_command: 'plan'
+          tg_command: 'run-all plan'
 
-      # Apply execution
-      - name: Terragrunt Apply
+      # Run-all Apply execution
+      - name: Terragrunt Run-All Apply
         uses: gruntwork-io/terragrunt-action@v2
         with:
           tf_version: ${{ inputs.tf_version }}
           tg_version: ${{ inputs.tg_version }}
           tg_dir: ${{ inputs.tg_dir }}
-          tg_command: 'apply'
+          tg_command: 'run-all apply'
           tg_add_approve: '1'
 
-      # Destroy resources after testing
-      - name: Terragrunt Destroy
+      # Run-all Destroy resources after testing
+      - name: Terragrunt Run-All Destroy
         uses: gruntwork-io/terragrunt-action@v2
         with:
           tf_version: ${{ inputs.tf_version }}
           tg_version: ${{ inputs.tg_version }}
           tg_dir: ${{ inputs.tg_dir }}
-          tg_command: 'destroy'
+          tg_command: 'run-all destroy'
           tg_add_approve: '1'

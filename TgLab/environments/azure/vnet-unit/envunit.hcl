@@ -1,5 +1,5 @@
 locals {
-  env_name = "test"
+  env_name = "unittest"
   
   tags = {
     "Environment" = local.env_name

@@ -3,7 +3,7 @@ include "root" {
 }
 
 include "env" {
-  path   = "${get_terragrunt_dir()}/../../../_env/azure/vnet/vnetV1.hcl"
+  path   = "${get_terragrunt_dir()}/../../../../_env/azure/vnet-unit/vnet-unit-V1.hcl"
   expose = true
 }
 
