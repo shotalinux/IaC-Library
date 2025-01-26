@@ -1,4 +1,4 @@
-name: AZ Resource Group Tests
+name: AZ vnet unit tests
 
 on:
   workflow_dispatch:
