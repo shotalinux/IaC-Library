@@ -9,9 +9,9 @@ locals {
 }
 
 inputs = {
-  subnet_name       = "subnet-${local.env_name}"
+  subnet_name       = ["subnet-${local.env_name}-1", "subnet-${local.env_name}-2"]
   location          = local.env_vars.locals.location
-  address_prefixes  = ["10.0.0.0/24"]
+  address_prefixes  = ["10.0.0.0/24", "10.0.1.0/24"]
   delegations       = []
   tags              = local.env_vars.locals.tags
 }

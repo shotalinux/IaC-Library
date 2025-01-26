@@ -9,7 +9,7 @@ include "env" {
 
 # Construct the terraform.source attribute using the source_base and default version
 terraform {
-  source = "${include.env.locals.source_base}//Azure/subnet/v1.0"
+  source = "${include.env.locals.source_base}//Azure/subnet/v1.1"
 }
 
 dependency "resgroup" {
