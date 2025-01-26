@@ -19,6 +19,7 @@ dependency "resgroup" {
   }
 
   mock_outputs_merge_strategy_with_state = "shallow"
+
 }
 
 inputs = {
