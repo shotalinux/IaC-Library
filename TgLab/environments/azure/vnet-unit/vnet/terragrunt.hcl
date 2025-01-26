@@ -15,13 +15,12 @@ terraform {
 dependency "resgroup" {
   config_path = "../resgroup"
   mock_outputs = {
-    resource_group_name     = "rg-mock-name"
+    resource_group_name = "rg-mock-name"
   }
 
   mock_outputs_merge_strategy_with_state = "shallow"
-
 }
 
 inputs = {
-  rg_name        = dependency.resgroup.outputs.resource_group_name
+  rg_name = dependency.resgroup.outputs.resource_group_name
 }
