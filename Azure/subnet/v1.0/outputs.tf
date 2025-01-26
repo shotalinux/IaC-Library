@@ -3,5 +3,5 @@ output "subnet_id" {
 }
 
 output "subnet_cidr" {
-  value = azurerm_subnet.example.address_prefix
+  value = azurerm_subnet.example.address_prefixes[0]
 }
