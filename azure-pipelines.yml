@@ -4,16 +4,32 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+- none
 
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  github_repo: 'shotalinux/IaC-Library'
+  branch_name: 'feature-branch'
+  pr_title: 'Automated PR from Azure DevOps'
+  pr_body: 'This is an automated PR created by Azure DevOps pipeline.'
+
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- checkout: self
+- script: |
+    git config --global user.name "Azure DevOps"
+    git config --global user.email "akhalaiashota@outlook.com"
+    git remote add github https://shotalinux:${{ secrets.GITHUB_PAT }}@github.com/${{ variables.github_repo }}.git
+  displayName: 'Set up Git and GitHub credentials'
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    git checkout -b ${{ variables.branch_name }}
+    git push github ${{ variables.branch_name }}
+  displayName: 'Create and push branch to GitHub'
+
+- script: |
+    curl -X POST -H "Authorization: token ${{ secrets.GITHUB_PAT }}" \
+    -d '{"title": "${{ variables.pr_title }}", "body": "${{ variables.pr_body }}", "head": "${{ variables.branch_name }}", "base": "main"}' \
+    https://api.github.com/repos/${{ variables.github_repo }}/pulls
+  displayName: 'Create Pull Request in GitHub'
