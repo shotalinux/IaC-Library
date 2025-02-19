@@ -10,6 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
+- group: GitHub
   github_repo: 'shotalinux/IaC-Library'
   branch_name: 'feature-branch'
   pr_title: 'Automated PR from Azure DevOps'
@@ -20,7 +21,7 @@ steps:
 - script: |
     git config --global user.name "Azure DevOps"
     git config --global user.email "akhalaiashota@outlook.com"
-    git remote add github https://shotalinux:${{ secrets.GITHUB_PAT }}@github.com/${{ variables.github_repo }}.git
+    git remote add github https://shotalinux:${{ $GITHUB_PAT }}@github.com/${{ variables.github_repo }}.git
   displayName: 'Set up Git and GitHub credentials'
 
 - script: |
@@ -29,7 +30,7 @@ steps:
   displayName: 'Create and push branch to GitHub'
 
 - script: |
-    curl -X POST -H "Authorization: token ${{ secrets.GITHUB_PAT }}" \
+    curl -X POST -H "Authorization: token ${{ $GITHUB_PAT }}" \
     -d '{"title": "${{ variables.pr_title }}", "body": "${{ variables.pr_body }}", "head": "${{ variables.branch_name }}", "base": "main"}' \
     https://api.github.com/repos/${{ variables.github_repo }}/pulls
   displayName: 'Create Pull Request in GitHub'
