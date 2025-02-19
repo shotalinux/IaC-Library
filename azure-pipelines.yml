@@ -16,9 +16,9 @@ steps:
 - checkout: self
 
 # Ensure full repo is fetched
-- script: |
-    git fetch --unshallow
-  displayName: 'Fetch Full Repository'
+#- script: |
+#    git fetch --unshallow
+#  displayName: 'Fetch Full Repository'
 
 # Verify Git Remote
 - script: |
