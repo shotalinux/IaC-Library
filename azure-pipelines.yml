@@ -14,22 +14,13 @@ variables:
 
 steps:
 - checkout: self
-  # Step to set up Git and GitHub credentials
-- script: |
-    git config --global user.name "Azure DevOps"
-    git config --global user.email "akhalaiashota@outlook.com"
-    git remote add github https://shotalinux:$(GITHUB_PAT)@github.com/$(github_repo).git
-  displayName: 'Set up Git and GitHub credentials'
 
-# Step to create a new branch and push to GitHub
+# Ensure full repo is fetched
 - script: |
-    git checkout -b $(branch_name)
-    git push github $(branch_name)
-  displayName: 'Create and push branch to GitHub'
+    git fetch --unshallow
+  displayName: 'Fetch Full Repository'
 
-# Step to create a pull request using GitHub API
+# Verify Git Remote
 - script: |
-    curl -X POST -H "Authorization: token $(GITHUB_PAT)" \
-    -d '{"title": "$(pr_title)", "body": "$(pr_body)", "head": "$(branch_name)", "base": "main"}' \
-    https://api.github.com/repos/$(github_repo)/pulls
-  displayName: 'Create Pull Request in GitHub'
+    git remote -v
+  displayName: 'Verify Git Remote'
