@@ -11,10 +11,6 @@ pool:
 
 variables:
 - group: GitHub
-  github_repo: 'shotalinux/IaC-Library'
-  branch_name: 'feature-branch'
-  pr_title: 'Automated PR from Azure DevOps'
-  pr_body: 'This is an automated PR created by Azure DevOps pipeline.'
 
 steps:
 - checkout: self
