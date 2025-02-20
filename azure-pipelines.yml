@@ -32,11 +32,28 @@ steps:
     git remote add github https://shotalinux:$(GITHUB_PAT)@github.com/$(github_repo).git
   displayName: 'Add GitHub Remote'
 
-# Create a new branch and push to GitHub
+# Fetch both main and feature-branch
 - script: |
-    git checkout -b $(branch_name)
-    git push github $(branch_name)
-  displayName: 'Create and push branch to GitHub'
+    git fetch github main
+    # Check if feature-branch exists locally
+    if ! git rev-parse --verify $(branch_name) >/dev/null 2>&1; then
+        echo "Feature branch doesn't exist locally, creating it from main..."
+        git checkout main
+        git pull github main
+        git checkout -b $(branch_name)
+        git push github $(branch_name)
+    else
+        echo "Feature branch exists locally, fetching it..."
+        git fetch github $(branch_name)
+    fi
+  displayName: 'Fetch both main and feature-branch'
+
+# Squash the commits of feature-branch into a single commit
+- script: |
+    git checkout $(branch_name)
+    git rebase -i --autosquash github/main
+    git push github $(branch_name) --force
+  displayName: 'Squash commits from feature-branch'
 
 # Create Pull Request using GitHub API
 - script: |
