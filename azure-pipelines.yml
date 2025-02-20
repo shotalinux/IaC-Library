@@ -23,8 +23,11 @@ steps:
   displayName: 'Set up Git credentials for Azure DevOps'
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Verify Git Remote
 =======
+=======
+>>>>>>> origin/master
 # Add GitHub remote
 - script: |
     git remote add github https://shotalinux:$(GITHUB_PAT)@github.com/$(github_repo).git || true
@@ -37,11 +40,15 @@ steps:
   displayName: 'Fetch GitHub main and Azure DevOps master'
 
 # Verify Git Remotes
+<<<<<<< HEAD
+>>>>>>> origin/master
+=======
 >>>>>>> origin/master
 - script: |
     git remote -v
   displayName: 'Verify Git Remote'
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 # Set up GitHub authentication
 - script: |
@@ -74,6 +81,8 @@ steps:
     git push github $(branch_name) --force  # Force push the fresh feature branch to GitHub
   displayName: 'Create fresh feature-branch from GitHub main, squash commits, and push to GitHub'
 =======
+=======
+>>>>>>> origin/master
 # Create a new feature branch from GitHub main
 - script: |
     git checkout -B $(branch_name) remotes/github/main
@@ -103,6 +112,9 @@ steps:
 - script: |
     git push --set-upstream github $(branch_name) || echo "Warning: Push failed, check remote settings."
   displayName: 'Push feature branch to GitHub'
+<<<<<<< HEAD
+>>>>>>> origin/master
+=======
 >>>>>>> origin/master
 
 # Create Pull Request using GitHub API
