@@ -1,0 +1,25 @@
+name: SonarCloud Scan
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main  # Trigger on pushes to the main branch
+  # pull_request:
+  #   types: [opened, synchronize]  # Trigger on PRs
+
+jobs:
+  sonarqube:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Required for SonarCloud to analyze the full history
+
+      - name: Run SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@v4.1.0  # Use the latest version
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # SonarCloud token
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}  # Project key
+          SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}  # Organization key

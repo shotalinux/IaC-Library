@@ -1,0 +1,66 @@
+trigger:
+- none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+- group: GitHub
+
+steps:
+- checkout: self
+  fetchDepth: 0  # Ensure full repo is fetched
+
+# Set up authentication for Azure DevOps
+- script: |
+    git config --global user.name "Azure DevOps"
+    git config --global user.email "$(me)"
+    git config --global credential.helper store
+    echo "https://$(System.AccessToken):x-oauth-basic@dev.azure.com" > ~/.git-credentials
+    chmod 600 ~/.git-credentials
+  env:
+    SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+  displayName: 'Set up Git credentials for Azure DevOps'
+
+# Verify Git Remote
+- script: |
+    git remote -v
+  displayName: 'Verify Git Remote'
+
+# Set up GitHub authentication
+- script: |
+    git remote add github https://shotalinux:$(GITHUB_PAT)@github.com/$(github_repo).git
+  displayName: 'Add GitHub Remote'
+
+# Fetch master from Azure DevOps, create feature-branch from GitHub main, and squash commits
+- script: |
+    # Fetch master branch from Azure DevOps (since Azure DevOps uses master) and main from GitHub
+    git fetch origin master
+    git fetch github main
+
+    # Check if feature-branch exists locally
+    if git rev-parse --verify $(branch_name) >/dev/null 2>&1; then
+        echo "Feature branch exists locally, deleting it..."
+        # Delete the feature-branch locally
+        git branch -D $(branch_name)  # Delete the local feature-branch
+    fi
+
+    # Create a fresh feature-branch from GitHub's main branch
+    echo "Creating fresh feature-branch from GitHub main..."
+    git checkout github/main  # Checkout GitHub's main branch
+    git checkout -b $(branch_name)  # Create feature-branch from GitHub main
+
+    # Rebase onto Azure DevOps' master branch and squash the commits
+    echo "Rebasing feature-branch onto Azure DevOps master..."
+    git rebase --autosquash origin/master  # Squash commits while rebasing
+
+    # Push the fresh feature branch to GitHub
+    git push github $(branch_name) --force  # Force push the fresh feature branch to GitHub
+  displayName: 'Create fresh feature-branch from GitHub main, squash commits, and push to GitHub'
+
+# Create Pull Request using GitHub API
+- script: |
+    curl -X POST -H "Authorization: token $(GITHUB_PAT)" \
+    -d '{"title": "$(pr_title)", "body": "$(pr_body)", "head": "$(branch_name)", "base": "main"}' \
+    https://api.github.com/repos/$(github_repo)/pulls
+  displayName: 'Create Pull Request in GitHub'
