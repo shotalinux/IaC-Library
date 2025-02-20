@@ -32,26 +32,29 @@ steps:
     git remote add github https://shotalinux:$(GITHUB_PAT)@github.com/$(github_repo).git
   displayName: 'Add GitHub Remote'
 
-# Fetch both main and feature-branch
+# Fetch master from Azure DevOps and feature branch from GitHub
 - script: |
-    git fetch github main
-    # Check if feature-branch exists locally
-    if ! git rev-parse --verify $(branch_name) >/dev/null 2>&1; then
-        echo "Feature branch doesn't exist locally, creating it from main..."
-        git checkout main
-        git pull github main
+    # Fetch master branch from Azure DevOps (default)
+    git fetch origin master
+    # Check if feature-branch exists on GitHub
+    if git ls-remote --exit-code github refs/heads/$(branch_name); then
+        echo "Feature branch exists on GitHub, overwriting it with Azure DevOps master..."
+        git checkout master
+        git pull origin master  # Ensure we have the latest master from Azure DevOps
+        git push github master:$(branch_name) --force  # Force push to overwrite feature-branch on GitHub
+    else
+        echo "Feature branch doesn't exist on GitHub, creating it from Azure DevOps master..."
+        git checkout master
+        git pull origin master  # Ensure we have the latest master from Azure DevOps
         git checkout -b $(branch_name)
         git push github $(branch_name)
-    else
-        echo "Feature branch exists locally, fetching it..."
-        git fetch github $(branch_name)
     fi
-  displayName: 'Fetch both main and feature-branch'
+  displayName: 'Fetch master from Azure DevOps and feature-branch from GitHub'
 
 # Squash the commits of feature-branch into a single commit
 - script: |
     git checkout $(branch_name)
-    git rebase -i --autosquash github/main
+    git rebase --autosquash github/main
     git push github $(branch_name) --force
   displayName: 'Squash commits from feature-branch'
 
