@@ -32,31 +32,32 @@ steps:
     git remote add github https://shotalinux:$(GITHUB_PAT)@github.com/$(github_repo).git
   displayName: 'Add GitHub Remote'
 
-# Fetch master from Azure DevOps and feature branch from GitHub
+# Fetch master from Azure DevOps, create feature-branch from master, and squash commits
 - script: |
-    # Fetch master branch from Azure DevOps (default)
+    # Fetch master branch from Azure DevOps (since Azure DevOps uses master)
     git fetch origin master
-    # Check if feature-branch exists on GitHub
-    if git ls-remote --exit-code github refs/heads/$(branch_name); then
-        echo "Feature branch exists on GitHub, overwriting it with Azure DevOps master..."
-        git checkout master
-        git pull origin master  # Ensure we have the latest master from Azure DevOps
-        git push github master:$(branch_name) --force  # Force push to overwrite feature-branch on GitHub
-    else
-        echo "Feature branch doesn't exist on GitHub, creating it from Azure DevOps master..."
-        git checkout master
-        git pull origin master  # Ensure we have the latest master from Azure DevOps
-        git checkout -b $(branch_name)
-        git push github $(branch_name)
+    
+    # Check if feature-branch exists locally
+    if git rev-parse --verify $(branch_name) >/dev/null 2>&1; then
+        echo "Feature branch exists locally, deleting it..."
+        # Delete the feature-branch locally
+        git branch -D $(branch_name)  # Delete the local feature-branch
     fi
-  displayName: 'Fetch master from Azure DevOps and feature-branch from GitHub'
 
-# Squash the commits of feature-branch into a single commit
-- script: |
-    git checkout $(branch_name)
-    git rebase --autosquash github/main
-    git push github $(branch_name) --force
-  displayName: 'Squash commits from feature-branch'
+    # Create a fresh feature-branch from Azure DevOps master branch
+    echo "Creating fresh feature-branch from Azure DevOps master..."
+    git checkout master
+    git pull origin master  # Ensure we have the latest master from Azure DevOps
+    git checkout -b $(branch_name)
+
+    # Rebase onto GitHub's main branch and squash the commits
+    echo "Rebasing feature-branch onto GitHub main..."
+    git fetch github main  # Ensure we have the latest main from GitHub
+    git rebase --autosquash github/main  # Squash commits while rebasing
+
+    # Push the fresh feature branch to GitHub
+    git push github $(branch_name) --force  # Force push the fresh feature branch to GitHub
+  displayName: 'Create fresh feature-branch from Azure DevOps master, squash commits, and push to GitHub'
 
 # Create Pull Request using GitHub API
 - script: |
