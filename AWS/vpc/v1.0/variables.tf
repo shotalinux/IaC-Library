@@ -1,42 +1,53 @@
-variable "vpc_name" {
-  description = "The name of the VPC"
-  type        = string
+variable "vpc_parameters" {
+  description = "VPC parameters"
+  type = map(object({
+    cidr_block           = string
+    enable_dns_support   = optional(bool, true)
+    enable_dns_hostnames = optional(bool, true)
+    tags                 = optional(map(string), {})
+  }))
+  default = {}
 }
 
-variable "vpc_cidr" {
-  description = "The CIDR block for the VPC"
-  type        = string
+
+variable "subnet_parameters" {
+  description = "Subnet parameters"
+  type = map(object({
+    cidr_block = string
+    vpc_name   = string
+    tags       = optional(map(string), {})
+  }))
+  default = {}
 }
 
-variable "availability_zones" {
-  description = "A list of availability zones to use for the VPC"
-  type        = list(string)
+variable "igw_parameters" {
+  description = "IGW parameters"
+  type = map(object({
+    vpc_name = string
+    tags     = optional(map(string), {})
+  }))
+  default = {}
 }
 
-variable "private_subnets" {
-  description = "A list of CIDR blocks for the private subnets"
-  type        = list(string)
-}
 
-variable "public_subnets" {
-  description = "A list of CIDR blocks for the public subnets"
-  type        = list(string)
+variable "rt_parameters" {
+  description = "RT parameters"
+  type = map(object({
+    vpc_name = string
+    tags     = optional(map(string), {})
+    routes = optional(list(object({
+      cidr_block = string
+      use_igw    = optional(bool, true)
+      gateway_id = string
+    })), [])
+  }))
+  default = {}
 }
-
-variable "enable_nat_gateway" {
-  description = "Whether to enable NAT gateways"
-  type        = bool
-  default     = true
-}
-
-variable "single_nat_gateway" {
-  description = "Whether to use a single NAT gateway"
-  type        = bool
-  default     = true
-}
-
-variable "tags" {
-  description = "A map of tags to assign to the VPC and its resources"
-  type        = map(string)
-  default     = {}
+variable "rt_association_parameters" {
+  description = "RT association parameters"
+  type = map(object({
+    subnet_name = string
+    rt_name     = string
+  }))
+  default = {}
 }
