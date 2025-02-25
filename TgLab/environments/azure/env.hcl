@@ -1,9 +1,11 @@
 locals {
-  env_name = "test"
+  env_name = "Test"
+  project  = "IaC-Library"
+  owner    = "Shota"
   
   tags = {
     "Environment" = local.env_name
-    "Owner"       = "Shota"
-    "Project"     = "IaC-Library"
+    "Owner"       = local.owner
+    "Project"     = local.project
   }
 }
