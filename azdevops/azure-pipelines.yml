@@ -1,0 +1,76 @@
+trigger:
+- none
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+- group: GitHub
+
+steps:
+- checkout: self
+  fetchDepth: 0  # Ensure full repo is fetched
+
+# Set up authentication for Azure DevOps
+- script: |
+    git config --global user.name "Azure DevOps"
+    git config --global user.email "$(me)"
+    git config --global credential.helper store
+    echo "https://$(System.AccessToken):x-oauth-basic@dev.azure.com" > ~/.git-credentials
+    chmod 600 ~/.git-credentials
+  env:
+    SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+  displayName: 'Set up Git credentials for Azure DevOps'
+
+# Add GitHub remote
+- script: |
+    git remote add github https://shotalinux:$(GITHUB_PAT)@github.com/$(github_repo).git || true
+  displayName: 'Add GitHub Remote'
+
+# Fetch both origin (GitHub) and azdevops (Azure DevOps)
+- script: |
+    git fetch origin master
+    git fetch github main
+  displayName: 'Fetch GitHub main and Azure DevOps master'
+
+# Verify Git Remotes
+- script: |
+    git remote -v
+  displayName: 'Verify Git Remote'
+
+# Create a new feature branch from GitHub main
+- script: |
+    git checkout -B $(branch_name) remotes/github/main
+  displayName: 'Create feature branch from GitHub main'
+
+# Verify Git branch
+- script: |
+    git branch -a
+  displayName: 'Verify Git Remote'
+
+# Delete azdevops dir from feature branch
+- script: |
+    rm -rf azdevops
+  displayName: 'Delete azdevops dir from feature branch'
+
+# Squash merge Azure DevOps master into the feature branch
+- script: |
+    git merge --squash --allow-unrelated-histories -Xtheirs origin/master
+  displayName: 'Squash merge Azure DevOps master into feature branch'
+
+# commit changes
+- script: |
+    git commit -m "Merge Azure DevOps master into feature-branch with squashed commit"
+  displayName: 'Squash merge Azure DevOps master into feature branch'
+
+# Push the new feature branch to GitHub
+- script: |
+    git push --set-upstream github $(branch_name)
+  displayName: 'Push feature branch to GitHub'
+
+# Create Pull Request using GitHub API
+- script: |
+    curl -X POST -H "Authorization: token $(GITHUB_PAT)" \
+    -d '{"title": "$(pr_title)", "body": "$(pr_body)", "head": "$(branch_name)", "base": "main"}' \
+    https://api.github.com/repos/$(github_repo)/pulls
+  displayName: 'Create Pull Request in GitHub'
