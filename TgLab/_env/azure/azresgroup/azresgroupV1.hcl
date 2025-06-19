@@ -3,7 +3,7 @@ locals {
   # always works at the context of the child configuration.
   env_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
 
-  env_name = local.env_vars.locals.env_name  # Corrected this line to reference 'env_name'
+  env_name = local.env_vars.locals.env_name # Corrected this line to reference 'env_name'
 
   source_base = "https://github.com/shotalinux/IaC-Library.git"
 }

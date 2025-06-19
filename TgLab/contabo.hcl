@@ -23,15 +23,15 @@ terraform {
     random = {
       source = "hashicorp/random"
     }
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.79"
+    contabo = {
+      source  = "contabo/contabo"
+      version = ">= 0.1.32"
     }
   }
 }
 
-provider "aws" {
-  region = "eu-central-1"
+provider "azurerm" {
+  features {}
 }
 EOF
 }
