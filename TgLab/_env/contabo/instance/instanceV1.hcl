@@ -8,8 +8,4 @@ locals {
 }
 
 inputs = {
-  tags          = [local.env_name]
-  img           = "linode/debian11"
-  region        = "fr-par"
-  instance_type = "g6-nanode-1"
 }

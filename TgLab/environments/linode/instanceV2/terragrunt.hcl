@@ -3,7 +3,7 @@ include "root" {
 }
 
 include "env" {
-  path   = "${get_terragrunt_dir()}/../../../_env/instance/instanceV2.hcl"
+  path   = "${get_terragrunt_dir()}/../../../_env/linode/instance/instanceV2.hcl"
   expose = true
 }
 

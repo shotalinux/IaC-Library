@@ -1,7 +1,7 @@
 generate "backend" {
   path      = "backend.tf"
   if_exists = "overwrite"
-  contents = <<EOF
+  contents  = <<EOF
 terraform {
   backend "s3" {
     bucket         = "shotas3"
@@ -17,7 +17,7 @@ EOF
 generate "providers" {
   path      = "providers.tf"
   if_exists = "skip"
-  contents = <<EOF
+  contents  = <<EOF
 terraform {
   required_providers {
     random = {

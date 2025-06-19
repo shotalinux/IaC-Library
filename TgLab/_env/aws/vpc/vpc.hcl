@@ -5,7 +5,7 @@ locals {
   project  = local.env_vars.locals.project
 
   source_base = "https://github.com/shotalinux/IaC-Library.git"
-  
+
 }
 
 inputs = {
