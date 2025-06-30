@@ -33,22 +33,22 @@ output "subnet_network_zone" {
   value       = hcloud_network_subnet.privSubnet.network_zone
 }
 
+output "network_labels" {
+  description = "Labels applied to the network"
+  value       = hcloud_network.privNet.labels
+}
+
 output "route_id" {
   value       = try(hcloud_network_route.privRoute[0].id, null)
   description = "ID of the network route"
 }
 
 output "route_destination" {
+  value       = try(hcloud_network_route.privRoute[0].destination, null)
   description = "Destination for the network route in CIDR notation"
-  value       = hcloud_network_route.privRoute.destination
 }
 
 output "route_gateway" {
+  value       = try(hcloud_network_route.privRoute[0].gateway, null)
   description = "Gateway for the network route"
-  value       = hcloud_network_route.privRoute.gateway
-}
-
-output "network_labels" {
-  description = "Labels applied to the network"
-  value       = hcloud_network.privNet.labels
 }
