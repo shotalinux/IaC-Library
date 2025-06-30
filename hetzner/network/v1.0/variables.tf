@@ -53,18 +53,6 @@ variable "network_labels" {
   default     = {}
 }
 
-variable "subnet_labels" {
-  description = "Labels to apply to the subnet"
-  type        = map(string)
-  default     = {}
-}
-
-variable "route_labels" {
-  description = "Labels to apply to the network route"
-  type        = map(string)
-  default     = {}
-}
-
 variable "enable_route" {
   description = "Enable creation of a network route"
   type        = bool

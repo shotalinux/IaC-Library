@@ -52,13 +52,3 @@ output "network_labels" {
   description = "Labels applied to the network"
   value       = hcloud_network.privNet.labels
 }
-
-output "subnet_labels" {
-  description = "Labels applied to the subnet"
-  value       = hcloud_network_subnet.privSubnet.labels
-}
-
-output "route_labels" {
-  description = "Labels applied to the network route"
-  value       = hcloud_network_route.privRoute.labels
-}
