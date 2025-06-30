@@ -11,7 +11,6 @@ resource "hcloud_network_subnet" "privSubnet" {
   type          = var.subnet_type
   ip_range      = var.subnet_ip_range
   network_zone  = var.network_zone
-  labels        = var.subnet_labels
 }
 
 resource "hcloud_network_route" "privRoute" {
@@ -19,5 +18,4 @@ resource "hcloud_network_route" "privRoute" {
   network_id    = hcloud_network.privNet.id
   destination   = var.route_destination
   gateway       = var.route_gateway
-  labels        = var.route_labels
 }
