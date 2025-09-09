@@ -1,8 +1,11 @@
+########################################
+# Load Balancer Core
+########################################
 resource "hcloud_load_balancer" "this" {
   name               = var.name
   load_balancer_type = var.load_balancer_type
 
-  # Use location by default (overrides network_zone if both are set)
+  # Defaults to location if set, otherwise network_zone
   location     = var.location
   network_zone = var.network_zone
 
@@ -10,7 +13,9 @@ resource "hcloud_load_balancer" "this" {
   delete_protection = var.delete_protection
 }
 
-# Optional: attach load balancer to private network
+########################################
+# Optional Network Attachment
+########################################
 resource "hcloud_load_balancer_network" "this" {
   count            = var.network_id != null ? 1 : 0
   load_balancer_id = hcloud_load_balancer.this.id
@@ -18,23 +23,39 @@ resource "hcloud_load_balancer_network" "this" {
   ip               = var.network_ip
 }
 
-# Services definition (loops over list of maps)
+########################################
+# Services (HTTP, HTTPS, TCP)
+########################################
 resource "hcloud_load_balancer_service" "this" {
-  for_each        = { for idx, svc in var.services : idx => svc }
+  for_each         = { for idx, svc in var.services : idx => svc }
   load_balancer_id = hcloud_load_balancer.this.id
   protocol         = each.value.protocol
   listen_port      = lookup(each.value, "listen_port", null)
   destination_port = lookup(each.value, "destination_port", null)
   proxyprotocol    = lookup(each.value, "proxyprotocol", false)
 
+  # HTTP configuration (sticky sessions etc.)
   dynamic "http" {
-    for_each = lookup(each.value, "http", null) != null ? [each.value.http] : []
+    for_each = each.value.protocol == "http" ? [each.value] : []
     content {
       sticky_sessions = lookup(http.value, "sticky_sessions", false)
       cookie_name     = lookup(http.value, "cookie_name", null)
     }
   }
 
+  # HTTPS configuration (certificates)
+  dynamic "http" {
+    for_each = each.value.protocol == "https" ? [each.value] : []
+    content {
+      sticky_sessions  = lookup(http.value, "sticky_sessions", false)
+      cookie_name      = lookup(http.value, "cookie_name", null)
+      certificates     = lookup(http.value, "certificates", [])
+      redirect_http    = lookup(http.value, "redirect_http", false)
+      tls_termination  = lookup(http.value, "tls_termination", true)
+    }
+  }
+
+  # Health check configuration
   dynamic "health_check" {
     for_each = lookup(each.value, "health_check", null) != null ? [each.value.health_check] : []
     content {
@@ -57,14 +78,16 @@ resource "hcloud_load_balancer_service" "this" {
   }
 }
 
-# Targets definition (loops over list of maps)
+########################################
+# Targets
+########################################
 resource "hcloud_load_balancer_target" "this" {
-  for_each        = { for idx, tgt in var.targets : idx => tgt }
-  type            = each.value.type
+  for_each         = { for idx, tgt in var.targets : idx => tgt }
+  type             = each.value.type
   load_balancer_id = hcloud_load_balancer.this.id
 
-  server_id        = lookup(each.value, "server_id", null)
-  label_selector   = lookup(each.value, "label_selector", null)
-  ip               = lookup(each.value, "ip", null)
-  use_private_ip   = lookup(each.value, "use_private_ip", false)
+  server_id      = lookup(each.value, "server_id", null)
+  label_selector = lookup(each.value, "label_selector", null)
+  ip             = lookup(each.value, "ip", null)
+  use_private_ip = lookup(each.value, "use_private_ip", false)
 }

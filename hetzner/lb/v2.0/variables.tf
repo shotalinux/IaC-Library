@@ -46,13 +46,55 @@ variable "network_ip" {
 }
 
 variable "services" {
-  description = "List of service definitions (protocol, ports, http, health_check)"
-  type        = list(any)
-  default     = []
+  description = <<EOT
+List of services for the load balancer. Example:
+[
+  {
+    protocol         = "http"
+    listen_port      = 80
+    destination_port = 80
+    http = {
+      sticky_sessions = true
+      cookie_name     = "SESSION_ID"
+    }
+    health_check = {
+      protocol = "http"
+      port     = 80
+      http = {
+        path     = "/health"
+        response = "OK"
+      }
+    }
+  },
+  {
+    protocol         = "https"
+    listen_port      = 443
+    destination_port = 443
+    http = {
+      sticky_sessions = true
+      certificates    = ["12345"] # cert IDs in Hetzner
+      redirect_http   = true
+    }
+  },
+  {
+    protocol         = "tcp"
+    listen_port      = 9000
+    destination_port = 9000
+  }
+]
+EOT
+  type    = list(any)
+  default = []
 }
 
 variable "targets" {
-  description = "List of target definitions (server_id, ip, etc.)"
-  type        = list(any)
-  default     = []
+  description = <<EOT
+List of targets for the load balancer. Example:
+[
+  { type = "server", server_id = 12345 },
+  { type = "ip", ip = "192.168.1.100" }
+]
+EOT
+  type    = list(any)
+  default = []
 }
