@@ -1,5 +1,5 @@
 module "naming" {
-  source = "git::https://github.com/shotalinux/IaC-Library.git//locals/naming/v1.0"
+  source = "git::https://github.com/shotalinux/IaC-Library.git//locals/naming/v1.1"
 
   namepref     = var.namepref
   nameslist    = var.nameslist
