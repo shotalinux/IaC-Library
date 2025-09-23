@@ -11,7 +11,7 @@ inputs = {
   name        = "server-ubuntu"
   replicas    = 2
 
-  server_type = "cx11"
+  server_type = "cpx11"
   image       = "ubuntu-24.04"
   location    = "nbg1"
 
