@@ -1,7 +1,7 @@
 locals {
   # Load env.hcl for labels
   env_vars = read_terragrunt_config(find_in_parent_folders("env.hcl"))
-  env_name = local.env_vars.locals.env
+  env_name = local.env_vars.locals.labels
 
   source_base = "https://github.com/shotalinux/IaC-Library.git"
 }
@@ -12,5 +12,5 @@ inputs = {
   type       = "ipv4"
   labels     = local.env_vars.locals.labels
 
-  delete_protection = true
+  delete_protection = false
 }

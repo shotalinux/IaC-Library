@@ -47,5 +47,5 @@ inputs = {
   # If the server is already created, use dependency outputs
   # server_ids = dependency.server.outputs.server_id
   # or use label-based attachment
-  label_selectors = ["Stage=${local.env_name.Stage}"]
+  label_selectors = ["Environment=${local.env_name["Environment"]}"]
 }
