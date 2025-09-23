@@ -10,7 +10,7 @@ locals {
 inputs = {
   nameslist   = ["server-rocky1", "server-rocky2"]
 
-  server_type = "cx11"
+  server_type = "cpx11"
   image       = "rocky-10"
   location    = "nbg1"
 
