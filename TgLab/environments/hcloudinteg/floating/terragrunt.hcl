@@ -8,7 +8,7 @@ include "env" {
 }
 
 terraform {
-  source = "${include.env.locals.source_base}//hetzner/ipfloating/v2.1"
+  source = "${include.env.locals.source_base}//hetzner/ipfloating/v2.2"
 }
 
 dependency "servers" {

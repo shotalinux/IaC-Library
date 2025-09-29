@@ -11,6 +11,4 @@ inputs = {
   replicas   = 2
   type       = "ipv4"
   labels     = local.env_vars.locals.labels
-
-  delete_protection = false
 }

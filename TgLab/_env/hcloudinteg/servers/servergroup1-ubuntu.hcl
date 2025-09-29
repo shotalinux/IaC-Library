@@ -8,7 +8,7 @@ locals {
 }
 
 inputs = {
-  name        = "server-ubuntu"
+  namepref    = "server-ubuntu"
   replicas    = 2
 
   server_type = "cpx11"
