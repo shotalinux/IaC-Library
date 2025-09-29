@@ -13,6 +13,14 @@ terraform {
 
 dependency "servers" {
   config_path = "../servergroup1"
+
+  mock_outputs = {
+    ids       = [111111, 222222]                # mock server IDs for plan
+    names     = ["server-ubuntu-1", "server-ubuntu-2"]
+    locations = ["nbg1", "nbg1"]                # mock locations
+  }
+
+  mock_outputs_merge_strategy_with_state = "shallow"
 }
 
 inputs = merge(

@@ -9,29 +9,37 @@ module "naming" {
   start_index  = var.start_index
 }
 
-# Determine home location
+# Build a map from FIP names to server ID + location
 locals {
-  fip_home_location = length(var.server_ids) > 0 ? var.server_locations[0] : "nbg1"
+  fip_map = {
+    for idx, name in module.naming.names :
+    name => {
+      server_id = length(var.server_ids) > idx ? var.server_ids[idx] : null
+      location  = length(var.server_locations) > idx ? var.server_locations[idx] : "nbg1"
+      default_location_used = length(var.server_locations) <= idx
+    }
+  }
 }
 
 # Print message if default location is used
 resource "null_resource" "fip_home_location_message" {
-  count = length(var.server_ids) > 0 ? 0 : 1
+  for_each = { for k, v in local.fip_map : k => v if v.default_location_used }
+
   provisioner "local-exec" {
-    command = "echo 'INFO: No servers provided. Default FIP home_location set to nbg1.'"
+    command = "echo 'INFO: No server provided for ${each.key}. Default FIP home_location set to nbg1.'"
   }
 }
 
-# Create floating IPs and attach to servers if provided
+# Create FIPs and assign to server if provided
 resource "hcloud_floating_ip" "this" {
-  for_each = toset(module.naming.names)
+  for_each = local.fip_map
 
-  type        = var.type
-  name        = each.value
-  home_location = local.fip_home_location
-  description = var.description
-  labels      = var.labels
+  type              = var.type
+  name              = each.key
+  home_location     = each.value.location
+  description       = var.description
+  labels            = var.labels
   delete_protection = var.delete_protection
 
-  server_id = length(var.server_ids) > 0 ? var.server_ids[each.key] : null
+  server_id = each.value.server_id
 }
