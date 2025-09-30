@@ -13,7 +13,7 @@ inputs = {
 
   server_type = "cpx11"
   image       = "ubuntu-24.04"
-  location    = "nbg1"
+  location    = "fsn1"
 
   ssh_keys    = ["shota@shotathink", "shota@shotalinux"]
 
