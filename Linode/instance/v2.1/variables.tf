@@ -36,7 +36,6 @@ variable "tags" {
 variable "ssh_key_label" {
   description = "SSH key label for the Linode instance."
   type        = string
-  default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICxIBT7h8KFR2u3foN15nvfEkyB8g6pU8BVysErG7PyN ubuntu@ip-172-26-0-132"
 }
 
 variable "instance_count" {
