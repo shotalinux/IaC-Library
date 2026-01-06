@@ -1,34 +1,34 @@
 # IaC-Library
 
 ## Overview
-
-The IaC-Library is a repository designed to host reusable Infrastructure as Code (IaC) modules. It provides a collection of Terraform and Terragrunt configurations for deploying various cloud resources across multiple providers, including AWS, Linode, Azure and ect... This library aims to simplify the process of infrastructure management by offering pre-defined modules that can be easily integrated into your projects.
+The IaC-Library is a collection of reusable Infrastructure as Code (IaC) modules for various cloud providers (AWS, Azure, Linode, Hetzner, etc.), designed to simplify infrastructure management using Terraform and Terragrunt.
 
 ## Features
+- **Reusable Modules**: Modular design for easy integration.
+- **Multi-Provider Support**: Deploy across multiple cloud environments.
+- **Terragrunt Integration**: Simplified state and configuration management.
+- **Testing**: Built-in workflows for unit testing.
 
-- **Reusable Modules**: Modular design allows for easy reuse of configurations across different projects.
-- **Multi-Provider Support**: Enabling deployment in multiple cloud environments.
-- **Terragrunt Integration**: Utilizes Terragrunt for managing Terraform configurations, making it easier to handle complex setups.
-- **Unit Testing**: Built-in workflows for unit testing to ensure the reliability of the infrastructure code.
+## Prerequisites
+- [Terraform](https://www.terraform.io/downloads.html)
+- [Terragrunt](https://terragrunt.gruntwork.io/)
+- Cloud Provider Credentials (AWS, Azure, Linode, etc.)
 
-## Getting Started
+## Module Usage
+Modules can be sourced directly from this repository.
 
-### Prerequisites
-
-- [Terraform](https://www.terraform.io/downloads.html) - Ensure you have the latest version installed.
-- [Terragrunt](https://terragrunt.gruntwork.io/) - Install Terragrunt to manage your Terraform configurations.
-- Cloud Provider Accounts - Set up accounts with AWS, Linode, Azure etc..., and obtain necessary API keys.
-
-### Module Usage
-
-You can directly import or retrieve the modules from this GitHub repository. For example, in the `TgLab` test environment, you can reference the modules in your Terragrunt configurations as follows:
-
+Example `terragrunt.hcl`:
 ```hcl
 terraform {
   source = "https://github.com/shotalinux/IaC-Library.git//Linode/instance/v2.0"
 }
 ```
 
-## Acknowledgments
+**Note on Module Referencing:**
+This project intentionally uses direct git URL referencing without version pinning (e.g., `?ref=...`) to facilitate rapid testing and learning. While strictly pinning versions is best practice for production environments to ensure immutability, this setup allows for immediate feedback during the development and study of these modules.
 
-- Thanks to the Terraform and Terragrunt communities for their contributions and support.
+## Resources
+We are grateful for the free and open-source resources provided by the Terraform and Terragrunt communities. These tools enable us to build, share, and learn globally.
+
+## Disclaimer
+**Note:** This project is strictly for **learning and testing purposes**. It is **not** intended for production use. Use at your own risk.
